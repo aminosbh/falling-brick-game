@@ -75,6 +75,13 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
     Game_resetFallingBrick(&grid, &fallingBrickX, &fallingBrickY);
     int fallingBrickSpeed = 2;
 
+    // Floating brick coodrdinates
+    int floatingBrickX = grid.xCells / 2;
+    int floatingBrickY = grid.yCells - 2;
+
+    // Color initial position
+    grid.cells[floatingBrickX][floatingBrickY].rectColor = COLOR_BLUE;
+
 
     // Event loop exit flag
     bool quit = false;
@@ -102,26 +109,30 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
                     break;
 
                 case SDLK_RIGHT:
-                    if(fallingBrickY != -1 && fallingBrickX < grid.xCells - 1)
+                    if(floatingBrickX < grid.xCells - 1
+                            // No brick at the right of the floating brick
+                            && (floatingBrickY != fallingBrickY || floatingBrickX != fallingBrickX - 1) )
                     {
-                        // Un-color last position
-                        grid.cells[fallingBrickX][fallingBrickY].rectColor = grid.backgroundColor;
+                        // Un-color the floating brick last position
+                        grid.cells[floatingBrickX][floatingBrickY].rectColor = grid.backgroundColor;
 
-                        // Color new position
-                        fallingBrickX++;
-                        grid.cells[fallingBrickX][fallingBrickY].rectColor = COLOR_RED;
+                        // Color the floating brick new position
+                        floatingBrickX++;
+                        grid.cells[floatingBrickX][floatingBrickY].rectColor = COLOR_BLUE;
                     }
                     break;
 
                 case SDLK_LEFT:
-                    if(fallingBrickY != -1 && fallingBrickX > 0)
+                    if(floatingBrickX > 0
+                            // No brick at the left of the floating brick
+                            && (floatingBrickY != fallingBrickY || floatingBrickX != fallingBrickX + 1) )
                     {
-                        // Un-color last position
-                        grid.cells[fallingBrickX][fallingBrickY].rectColor = grid.backgroundColor;
+                        // Un-color the floating brick last position
+                        grid.cells[floatingBrickX][floatingBrickY].rectColor = grid.backgroundColor;
 
-                        // Color new position
-                        fallingBrickX--;
-                        grid.cells[fallingBrickX][fallingBrickY].rectColor = COLOR_RED;
+                        // Color the floating brick new position
+                        floatingBrickX--;
+                        grid.cells[floatingBrickX][floatingBrickY].rectColor = COLOR_BLUE;
                     }
                     break;
                 }
@@ -142,8 +153,17 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
                 // Go to next position
                 fallingBrickY++;
 
-                // Color the falling brick new position
-                grid.cells[fallingBrickX][fallingBrickY].rectColor = COLOR_RED;
+                // Check collision between the falling brick and the floating brick
+                if(fallingBrickX == floatingBrickX && fallingBrickY == floatingBrickY)
+                {
+                    // Reset position
+                    Game_resetFallingBrick(&grid, &fallingBrickX, &fallingBrickY);
+                }
+                else
+                {
+                    // Color the falling brick new position
+                    grid.cells[fallingBrickX][fallingBrickY].rectColor = COLOR_RED;
+                }
             }
             else
             {
