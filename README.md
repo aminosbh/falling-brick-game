@@ -1,7 +1,8 @@
-# Basic C SDL game
+# Falling Brick game
 
-This project is a basic C [SDL][] game that uses [CMake][] as a build system.<br>
-It shows how we can develop a basic grid-based game.
+This game is a simple grid-based game written in C.<br>
+It uses the [SDL][] library to render graphics and uses [CMake][] as a build system.<br>
+
 
 ## Dependencies
 
@@ -30,8 +31,8 @@ sudo apt install libsdl2-image-dev libsdl2-ttf-dev
 
 ```sh
 # Clone this repo
-git clone https://gitlab.com/aminosbh/basic-c-sdl-game.git
-cd basic-c-sdl-game
+git clone https://gitlab.com/aminosbh/falling-brick-game.git
+cd falling-brick-game
 
 # Create a build folder
 mkdir build
@@ -42,7 +43,7 @@ cmake ..
 make
 
 # Run
-./basic-c-sdl-game
+./falling-brick-game
 ```
 
 ***Note:*** To use SDL2_image or SDL2_ttf, you should uncomment
