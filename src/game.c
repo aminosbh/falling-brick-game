@@ -200,10 +200,8 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
         // Render grid
         Grid_render(&grid, renderer);
 
-        // Show message
-        stringRGBA(renderer, grid.rect.x + grid.xCells, grid.rect.y - 20,
-                   "This is a falling brick < Press RIGTH and LEFT to move >",
-                   COLOR_LIGHT_GRAY.r, COLOR_LIGHT_GRAY.g, COLOR_LIGHT_GRAY.b, COLOR_LIGHT_GRAY.a);
+        // Show score, number of remaining lifes and speed
+        Game_showBoard(renderer, grid.rect.x + grid.xInterspace, grid.rect.y - 20, score, lifes, fallingBrickSpeed);
 
         // Update screen
         SDL_RenderPresent(renderer);
@@ -213,6 +211,14 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
     }
 
     return true;
+}
+
+void Game_showBoard(SDL_Renderer *renderer, int x, int y, int score, int lifes, int speed)
+{
+    char board[30];
+    sprintf(board, "Score: %d  Lifes: %d  Speed: %d", score, lifes, speed);
+    stringRGBA(renderer, x, y, board,
+               COLOR_LIGHT_GRAY.r, COLOR_LIGHT_GRAY.g, COLOR_LIGHT_GRAY.b, COLOR_LIGHT_GRAY.a);
 }
 
 void Game_resetFallingBrick(Grid *grid, int *x, int *y)
