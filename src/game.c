@@ -71,9 +71,9 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
     long long last = Utils_time();
 
     // Falling brick coordinates
-    int fallingBrickX = grid.xCells / 2;
-    int fallingBrickY = -1;
-    int fallingBrickSpeed = 4;
+    int fallingBrickX, fallingBrickY;
+    Game_resetFallingBrick(&grid, &fallingBrickX, &fallingBrickY);
+    int fallingBrickSpeed = 2;
 
 
     // Event loop exit flag
@@ -148,7 +148,7 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
             else
             {
                 // Reset position
-                fallingBrickY = -1;
+                Game_resetFallingBrick(&grid, &fallingBrickX, &fallingBrickY);
             }
 
             last = Utils_time();
@@ -173,4 +173,10 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
     }
 
     return true;
+}
+
+void Game_resetFallingBrick(Grid *grid, int *x, int *y)
+{
+    *x = Utils_rand(0, grid->xCells - 1); // Generate random number
+    *y = -1;
 }

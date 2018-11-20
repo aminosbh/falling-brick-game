@@ -41,6 +41,9 @@
 
 int main(int argc, char* argv[])
 {
+    // Initialize random number generator
+    Utils_randInit();
+
     // Initialize SDL
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
     {

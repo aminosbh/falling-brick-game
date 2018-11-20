@@ -39,5 +39,6 @@
 
 
 bool Game_start(SDL_Renderer *renderer, int w, int h);
+void Game_resetFallingBrick(Grid *grid, int *x, int *y);
 
 #endif // GAME_H
