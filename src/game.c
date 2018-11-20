@@ -30,6 +30,8 @@
 
 #include "game.h"
 
+#define NUMBER_OF_LIFES    5
+
 bool Game_start(SDL_Renderer *renderer, int w, int h)
 {
     // Init grid
@@ -81,6 +83,10 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
 
     // Color initial position
     grid.cells[floatingBrickX][floatingBrickY].rectColor = COLOR_BLUE;
+
+    // Score and lifes
+    int score = 0;
+    int lifes = NUMBER_OF_LIFES;
 
 
     // Event loop exit flag
@@ -156,6 +162,9 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
                 // Check collision between the falling brick and the floating brick
                 if(fallingBrickX == floatingBrickX && fallingBrickY == floatingBrickY)
                 {
+                    score++;
+                    fallingBrickSpeed++;
+
                     // Reset position
                     Game_resetFallingBrick(&grid, &fallingBrickX, &fallingBrickY);
                 }
@@ -167,6 +176,17 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
             }
             else
             {
+                // Remove a life
+                lifes--;
+                if(lifes <= 0)
+                {
+                    // Reset lifes
+                    lifes = NUMBER_OF_LIFES;
+
+                    // Remove from score
+                    score--;
+                }
+
                 // Reset position
                 Game_resetFallingBrick(&grid, &fallingBrickX, &fallingBrickY);
             }
