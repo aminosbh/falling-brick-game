@@ -42,7 +42,10 @@ const SDL_Color COLOR_LIGHT_GRAY    = {200, 200, 200, 200};
 const SDL_Color COLOR_RED           = {255, 0, 0, 255};
 const SDL_Color COLOR_GREEN         = {0, 255, 0, 255};
 const SDL_Color COLOR_BLUE          = {0, 0, 255, 255};
-const SDL_Color COLOR_YELLOW        = {0, 255, 255, 255};
+const SDL_Color COLOR_YELLOW        = {255, 255, 0, 255};
+const SDL_Color COLOR_ORANGE        = {255, 133, 0, 255};
+const SDL_Color COLOR_PINK          = {255, 0, 206, 255};
+const SDL_Color COLOR_VIOLET        = {145, 0, 255, 255};
 
 void Utils_setBackgroundColor(SDL_Renderer *renderer, SDL_Color color)
 {
@@ -68,4 +71,10 @@ void Utils_randInit()
 int Utils_rand(int min, int max)
 {
     return ( rand() % (max + 1) ) + min;
+}
+
+bool Utils_equalColors(SDL_Color color1, SDL_Color color2)
+{
+    //return color1.r == color2.r && color1.g == color2.g && color1.b == color2.b && color1.a == color2.a;
+    return *((Sint32 *) &color1) == *((Sint32 *) &color2);
 }

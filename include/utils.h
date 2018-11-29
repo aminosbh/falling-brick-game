@@ -31,6 +31,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <stdbool.h>
+
 #include <SDL2/SDL.h>
 
 
@@ -51,6 +53,9 @@ extern const SDL_Color COLOR_RED;
 extern const SDL_Color COLOR_GREEN;
 extern const SDL_Color COLOR_BLUE;
 extern const SDL_Color COLOR_YELLOW;
+extern const SDL_Color COLOR_ORANGE;
+extern const SDL_Color COLOR_PINK;
+extern const SDL_Color COLOR_VIOLET;
 
 
 void Utils_setBackgroundColor(SDL_Renderer *renderer, SDL_Color color);
@@ -59,5 +64,7 @@ long long Utils_time();
 
 void Utils_randInit();
 int Utils_rand(int min, int max);
+
+bool Utils_equalColors(SDL_Color color1, SDL_Color color2);
 
 #endif // UTILS_H
