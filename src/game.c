@@ -204,7 +204,7 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
         Grid_render(&grid, renderer);
 
         // Show score, number of remaining lifes and speed
-        Game_showBoard(renderer, grid.rect.x + grid.xInterspace, grid.rect.y - 20, score, lifes, fallingBrickSpeed);
+        Game_showBoard(renderer, grid.rect.x + grid.border, grid.rect.y - 20, score, lifes, fallingBrickSpeed);
 
         // Update screen
         SDL_RenderPresent(renderer);
