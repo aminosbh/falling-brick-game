@@ -40,13 +40,11 @@ int Grid_ajustSize(Grid *grid)
     }
 
     // Init rect
-    int interspaceWidth = (grid->xCells + 2) * grid->xInterspace;
-    grid->rect.w -= (grid->rect.w - interspaceWidth) % grid->xCells;
+    int interspaceWidth = grid->xCells * grid->cellsBorder * 2;
+    grid->rect.w -= (grid->rect.w - (grid->border * 2) - interspaceWidth) % grid->xCells;
 
-    int interspaceHeigth = (grid->yCells + 2) * grid->yInterspace;
-    grid->rect.h -= (grid->rect.h - interspaceHeigth) % grid->yCells;
-
-    printf("w: %d, h: %d", grid->rect.w, grid->rect.h);
+    int interspaceHeigth = grid->yCells * grid->cellsBorder * 2;
+    grid->rect.h -= (grid->rect.h - (grid->border * 2) - interspaceHeigth) % grid->yCells;
 
     return true;
 }
@@ -82,7 +80,7 @@ bool Grid_init(Grid *grid)
                           &(grid->cells[i][j]),
                           i, j,
                           grid->backgroundColor,
-                          grid->borderColor);
+                          grid->cellsBorderColor);
         }
     }
 
@@ -92,23 +90,23 @@ bool Grid_init(Grid *grid)
 void Grid_initCell(Grid *grid, Cell *cell, int i, int j, SDL_Color color, SDL_Color borderColor)
 {
     // Init rect
-    int interspaceWidth = (grid->xCells + 2) * grid->xInterspace;
-    cell->rect.w = (grid->rect.w - interspaceWidth) / grid->xCells;
+    int interspaceWidth = grid->xCells * grid->cellsBorder * 2;
+    cell->rect.w = (grid->rect.w - (grid->border * 2) - interspaceWidth) / grid->xCells;
 
-    int interspaceHeigth = (grid->yCells + 2) * grid->yInterspace;
-    cell->rect.h = (grid->rect.h - interspaceHeigth) / grid->yCells;
+    int interspaceHeigth = grid->yCells * grid->cellsBorder * 2;
+    cell->rect.h = (grid->rect.h - (grid->border * 2) - interspaceHeigth) / grid->yCells;
 
-    cell->rect.x = grid->rect.x + grid->xInterspace * (i+1.5) + cell->rect.w * i;
-    cell->rect.y = grid->rect.y + grid->xInterspace * (j+1.5) + cell->rect.h * j;
+    cell->rect.x = grid->rect.x + grid->border + grid->cellsBorder + (grid->cellsBorder * 2 + cell->rect.w) * i;
+    cell->rect.y = grid->rect.y + grid->border + grid->cellsBorder + (grid->cellsBorder * 2 + cell->rect.h) * j;
 
     // Init rectColor
     cell->rectColor = color;
 
     // Init border
-    cell->border.w = cell->rect.w + grid->xInterspace;
-    cell->border.h = cell->rect.h + grid->yInterspace;
-    cell->border.x = cell->rect.x - grid->xInterspace/2;
-    cell->border.y = cell->rect.y - grid->yInterspace/2;
+    cell->border.w = cell->rect.w + grid->cellsBorder * 2;
+    cell->border.h = cell->rect.h + grid->cellsBorder * 2;
+    cell->border.x = cell->rect.x - grid->cellsBorder;
+    cell->border.y = cell->rect.y - grid->cellsBorder;
 
     // Init borderColor
     cell->borderColor = borderColor;
@@ -116,15 +114,18 @@ void Grid_initCell(Grid *grid, Cell *cell, int i, int j, SDL_Color color, SDL_Co
 
 void Grid_render(Grid *grid, SDL_Renderer *renderer)
 {
-    // Set renderer color to draw the grid border
-    SDL_SetRenderDrawColor(renderer,
-                           grid->borderColor.r,
-                           grid->borderColor.g,
-                           grid->borderColor.b,
-                           grid->borderColor.a);
+    if(grid->border != 0) // Grid border thickness different from 0
+    {
+        // Set renderer color to draw the grid border
+        SDL_SetRenderDrawColor(renderer,
+                               grid->borderColor.r,
+                               grid->borderColor.g,
+                               grid->borderColor.b,
+                               grid->borderColor.a);
 
-    // Render grid border
-    SDL_RenderFillRect(renderer, &(grid->rect));
+        // Render grid border
+        SDL_RenderFillRect(renderer, &(grid->rect));
+    }
 
     // Render all cells
     for(int i = 0; i < grid->xCells; ++i)
@@ -138,15 +139,18 @@ void Grid_render(Grid *grid, SDL_Renderer *renderer)
 
 void Grid_renderCell(Cell *cell, SDL_Renderer *renderer)
 {
-    // Set renderer color to cell color
-    SDL_SetRenderDrawColor(renderer,
-                           cell->borderColor.r,
-                           cell->borderColor.g,
-                           cell->borderColor.b,
-                           cell->borderColor.a);
+    if(cell->border.x != cell->rect.x) // Cells border thickness different from 0
+    {
+        // Set renderer color to cell color
+        SDL_SetRenderDrawColor(renderer,
+                               cell->borderColor.r,
+                               cell->borderColor.g,
+                               cell->borderColor.b,
+                               cell->borderColor.a);
 
-    // Render filled cell
-    SDL_RenderFillRect(renderer, &(cell->border));
+        // Render filled cell
+        SDL_RenderFillRect(renderer, &(cell->border));
+    }
 
     // Set renderer color to cell color
     SDL_SetRenderDrawColor(renderer,
